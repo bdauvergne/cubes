@@ -163,7 +163,7 @@ class SlicerBrowser(AggregationBrowser):
         response = self.store.request(action)
         return response
 
-    def is_builtin_function(self, name, aggregate):
+    def is_builtin_function(self, name):
         return True
 
     def _order_param(self, order):
