@@ -152,6 +152,9 @@ class SlicerModelProvider(ModelProvider):
     def list_cubes(self):
         return self.store.request('cubes')
 
+    def has_cube(self, name):
+        return any(cube.get('name') == name for cube in self.list_cubes())
+
     def cube(self, name, locale=None, namespace=None):
         params = {}
         if locale:
