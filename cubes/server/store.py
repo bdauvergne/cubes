@@ -175,10 +175,10 @@ class SlicerModelProvider(ModelProvider):
             cube_desc["browser_options"] = browser_options
 
         # Link the cube in-place
-        cube = create_cube(cube_desc)
+        cube = Cube.from_metadata(cube_desc)
         for dim in dimensions:
-            dim = create_dimension(dim)
-            cube.add_dimension(dim)
+            dim = Dimension.from_metadata(dim)
+            cube._add_dimension(dim)
 
         cube.store = self.store
         return cube
