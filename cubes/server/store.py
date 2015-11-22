@@ -1,4 +1,5 @@
 # -*- coding=utf -*-
+import urlparse
 from ..model import *
 from ..browser import *
 from ..stores import Store
@@ -101,7 +102,7 @@ class SlicerStore(Store):
             params[self.auth_parameter] = self.auth_identity
 
         params_str = compat.urlencode(params)
-        request_url = '%s/%s' % (self.url, action)
+        request_url = urlparse.urljoin(self.url, action)
 
         if params_str:
             request_url += '?' + params_str
