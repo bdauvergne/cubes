@@ -139,7 +139,7 @@ class SlicerBrowser(AggregationBrowser):
 
         params["format"] = "json_lines"
 
-        action = "/cube/%s/members/%s" % (self.cube.basename, str(dimension))
+        action = "cube/%s/members/%s" % (self.cube.basename, str(dimension))
         response = self.store.request(action, params, is_lines=True)
 
         return response
@@ -159,7 +159,7 @@ class SlicerBrowser(AggregationBrowser):
         return response
 
     def fact(self, fact_id):
-        action = "/cube/%s/fact/%s" % (self.cube.basename, str(fact_id))
+        action = "cube/%s/fact/%s" % (self.cube.basename, str(fact_id))
         response = self.store.request(action)
         return response
 
