@@ -79,7 +79,7 @@ class ModelObject(object):
         dictionary."""
 
         self.name = name
-        self.label = label
+        self.label = label or name
         self.description = description
         self.info = info or {}
 
@@ -2075,7 +2075,7 @@ class AttributeBase(ModelObject):
         `cubes.ArgumentError` is raised when unknown ordering type is
         specified.
         """
-        super(AttributeBase, self).__init__(name, label, description, info)
+        super(AttributeBase, self).__init__(name=name, label=label, description=description, info=info)
 
         self.format = format
         self.missing_value = missing_value
