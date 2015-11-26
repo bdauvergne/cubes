@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import
 
+import six
 import copy
 import re
 from collections import namedtuple
@@ -34,6 +35,7 @@ __all__ = [
 NULL_PATH_VALUE = '__null__'
 
 
+@six.python_2_unicode_compatible
 class Cell(object):
     """Part of a cube determined by slicing dimensions. Immutable object."""
     def __init__(self, cube=None, cuts=None):
@@ -449,7 +451,7 @@ class Cell(object):
     def to_str(self):
         """Return string representation of the cell by using standard
         cuts-to-string conversion."""
-        return string_from_cuts(self.cuts)
+        return six.text_type(self)
 
     def __str__(self):
         """Return string representation of the cell by using standard
@@ -457,7 +459,7 @@ class Cell(object):
         return string_from_cuts(self.cuts)
 
     def __repr__(self):
-        return 'Cell(%s: %s)' % (str(self.cube), self.to_str() or 'All')
+        return 'Cell(%r: %r)' % (six.text_type(self.cube), self.to_str() or 'All')
 
     def __nonzero__(self):
         """Returns `True` if the cell contains cuts."""
@@ -703,7 +705,6 @@ def string_from_path(path):
                           "keys contain invalid characters "
                           "(should be alpha-numeric or underscore) '%s'" %
                           path)
-
     string = PATH_STRING_SEPARATOR_CHAR.join(path)
     return string
 
@@ -764,9 +765,10 @@ class Cut(object):
         raise NotImplementedError
 
     def __repr__(self):
-        return str(self.to_dict())
+        return repr(self.to_dict())
 
 
+@six.python_2_unicode_compatible
 class PointCut(Cut):
     """Object describing way of slicing a cube (cell) through point in a
     dimension"""
@@ -812,6 +814,7 @@ class PointCut(Cut):
         return not self.__eq__(other)
 
 
+@six.python_2_unicode_compatible
 class RangeCut(Cut):
     """Object describing way of slicing a cube (cell) between two points of a
     dimension that has ordered points. For dimensions with unordered points
@@ -878,6 +881,7 @@ class RangeCut(Cut):
         return not self.__eq__(other)
 
 
+@six.python_2_unicode_compatible
 class SetCut(Cut):
     """Object describing way of slicing a cube (cell) between two points of a
     dimension that has ordered points. For dimensions with unordered points

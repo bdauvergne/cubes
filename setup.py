@@ -1,7 +1,7 @@
 import sys
 from setuptools import setup, find_packages
 
-requirements = ["python-dateutil", "jsonschema", "expressions", "click"]
+requirements = ["python-dateutil", "jsonschema", "expressions", "click", "six"]
 
 extras = {
     'sql': 'sqlalchemy>= 0.9.0',
