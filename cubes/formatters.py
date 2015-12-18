@@ -14,6 +14,7 @@ import csv
 import codecs
 import decimal
 import datetime
+import isodate
 
 try:
     import jinja2
@@ -142,6 +143,8 @@ class SlicerJSONEncoder(json.JSONEncoder):
             return float(o)
         if type(o) == datetime.date or type(o) == datetime.datetime:
             return o.isoformat()
+        if type(o) == datetime.timedelta:
+            return isodate.duration_isoformat(o)
         if hasattr(o, "to_dict") and callable(getattr(o, "to_dict")):
             return o.to_dict()
         else:
