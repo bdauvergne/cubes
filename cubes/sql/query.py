@@ -21,7 +21,7 @@ import logging
 
 import sqlalchemy as sa
 import sqlalchemy.sql as sql
-from sqlalchemy.sql.expression import and_
+from sqlalchemy.sql.expression import and_, literal
 
 from collections import namedtuple
 from ..model import depsort_attributes, object_dict
@@ -721,6 +721,7 @@ class StarSchema(object):
         # central table) of the schema.
         star = tables[0].table
 
+        previous_is_outer = False
         for table in tables[1:]:
             if not table.join:
                 raise ModelError("Missing join for table '{}'"
@@ -799,9 +800,16 @@ class StarSchema(object):
             else:
                 raise ModelError("Unknown join method '%s'" % join.method)
 
-            star = sql.expression.join(left, right,
-                                       onclause=onclause,
-                                       isouter=is_outer)
+            if is_outer and previous_is_outer:
+                left = sql.expression.join(left, right.left, onclause=literal(True))
+                onclause = right.onclause & onclause
+                right = right.right
+                star = sql.expression.join(left, right, onclause=onclause,
+                                           isouter=is_outer)
+            else:
+                star = sql.expression.join(left, right,
+                                           onclause=onclause,
+                                           isouter=is_outer)
 
             # Consume the detail
             if detail_key not in star_tables:
@@ -812,6 +820,7 @@ class StarSchema(object):
             # product itself.
             star_tables[detail_key] = star
             star_tables[master_key] = star
+            previous_is_outer = is_outer
 
         return star
 
